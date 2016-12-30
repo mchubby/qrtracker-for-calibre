@@ -1,0 +1,30 @@
+﻿
+Prereqs
+- is not detected as cover/gallery/credits (heuristics tbd)
+
+Liminar
+	(in the following, xmlns:epub="http://www.idpf.org/2007/ops")
+	Getting title of "chapter/section" (current file), by order:
+	- <https://idpf.github.io/epub-vocabs/structure/#h_titles>
+	  first match in `<h1>` through `<h4>`
+		having attribute `epub:type="title"`
+	- element having attribute `epub:type="chapter"`
+		and having non-blank attribute `title`
+	- `<title>` if not blank
+	- first match in `<h1>` through `<h4>` if not blank
+	- get from TOC (if not too much a hassle)
+	- filename (often garbled by generators)
+
+	Get the target div by id
+	- if exists, and it contains an image, mark for deletion
+	Generate image from book title & collected title
+	- prepare image and insertion code (preserve node attributes)
+
+	Create checkpoint
+	
+	Delete previous image (fail silently)
+	Insert generated file (with meaningful name if possible)
+	If node does not exist, create it (aside with class, `epub:type="pullquote"` if relevant)
+	- Obtain target node
+	- Replace inner with insertion code
+	
