@@ -12,7 +12,7 @@ before_install:
     - pip install pycodestyle
     - pip install autopep8
 
-script:
+script: true
     # Work on a specific branch $TRAVIS_BRANCH for linting and pushing to the repo
     # Run pycodestyle on all .py files in all subfolders
     # We must ignore E402 module level import not at top of file
