@@ -1,3 +1,7 @@
 language: python
 python: 2.7.9
-script: find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle  --ignore=E303,E402 --max-line-length=128 {}
+before_install:
+- pip install pycodestyle
+- pip install autopep8
+script:
+- find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle  --ignore=E303,E402 --max-line-length=128 {} +
