@@ -8,7 +8,7 @@ Its use case is for e-readers that are for a reason or another disconnected from
 
 # Installing
 
- * Download a zipped copy of this repository, either using a [tagged release](https://github.com/mchubby/qrtracker-for-calibre/releases/latest), or by getting the so-called [“zipball”](https://github.com/mchubby/qrtracker-for-calibre/archive/master.zip)
+ * Download a zipped copy of this repository, either using a [tagged release](https://github.com/mchubby/qrtracker-for-calibre/releases/latest). Notice: at this point, Calibre requires files packed inside zip to sit at **top-level of archive** and not in a subdirectory. Download the zip marked as **RELEASE**.
  * Install this ZIP using the Calibre "preferences > plugins" dialog. [Click here for a tutorial with images](http://www.ismoothblog.com/2012/07/how-to-install-plugin-to-calibre.html) in case you cannot find it.
 
 # Using
