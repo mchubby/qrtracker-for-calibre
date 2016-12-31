@@ -3,6 +3,7 @@
     "linters": {
         "flake8": {
             "ignore": "E303,E402",
+            "builtins": "_",
             "max-line-length": 128
         },
         "pep8": {
