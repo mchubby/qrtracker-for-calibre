@@ -10,7 +10,7 @@ script:
 - num_errors_before=`find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle --ignore=E303,E402 --max-line-length=128 {} + | wc -l`
 - echo "Errors before = $num_errors_before"
 - git checkout $TRAVIS_BRANCH
-- find . ! -path './extern/*' -type f -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place --ignore E303,E402 {} +
+- find . ! -path './extern/*' -type f -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place --ignore E303,E402 --max-line-length=128 {} +
 - num_errors_after=`find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle --ignore=E303,E402 --max-line-length=128 {} + | wc -l`
 - echo "Errors after = $num_errors_after"
 - |

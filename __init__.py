@@ -1,10 +1,6 @@
 #!/usr/bin/env python2
 # vim:fileencoding=utf-8:ai:ts=4:sw=4:et:sts=4:tw=128:
-from __future__ import (
-    unicode_literals,
-    division,
-    absolute_import,
-    print_function)
+from __future__ import (unicode_literals, division, absolute_import, print_function)
 """This package is calibre_plugins.qrcode_tracker_philidel once imported by Calibre"""
 
 __license__ = 'GPL v3'
