@@ -3,8 +3,8 @@ python: 2.7.9
 before_install:
 - pip install pycodestyle
 - pip install autopep8
-- git config --global user.email "ac@example.org"
-- git config --global user.name "Travis"
+- git config --global user.email "mchubby-ci@users.noreply.github.com"
+- git config --global user.name "Travis-CI Bot"
 script:
 - cd "$TRAVIS_BUILD_DIR"
 - num_errors_before=`find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle --ignore=E303,E402 --max-line-length=128 {} + | wc -l`
