@@ -3,5 +3,22 @@ python: 2.7.9
 before_install:
 - pip install pycodestyle
 - pip install autopep8
+- git config --global user.email "ac@example.org"
+- git config --global user.name "Travis"
 script:
+- cd "$TRAVIS_BUILD_DIR"
+- num_errors_before=`find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle --ignore=E303,E402 --max-line-length=128 {} + | wc -l`
+- echo "Errors before: $num_errors_before"
+- git checkout $TRAVIS_BRANCH
+- find . ! -path './extern/*' -type f -name \*.py -exec autopep8 --recursive --aggressive --aggressive --in-place --ignore E303,E402 {} +
+- num_errors_after=`find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle --ignore=E303,E402 --max-line-length=128 {} + | wc -l`
+- echo "Errors before: $num_errors_after"
+- |
+   if (( $num_errors_after < $num_errors_before )); then
+       git commit -a -m "automated pycodestyle fix"
+       git config --global push.default simple # Push only to the current branch.  
+       # Make sure to make the output quiet, or else the API token will 
+       # leak!  This works because the API key can replace your password.
+       git push --quiet
+   fi
 - find . ! -path './extern/*' -type f -name \*.py -exec pycodestyle  --ignore=E303,E402 --max-line-length=128 {} +
