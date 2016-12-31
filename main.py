@@ -6,11 +6,11 @@ __license__ = 'GPL v3'
 __copyright__ = '2016, Marco77 <http://www.mobileread.com/forums/member.php?u=271721>'
 __docformat__ = 'restructuredtext en'
 
-from copy import deepcopy
-from datetime import datetime
-from future_builtins import map
-import io
-from lxml import etree
+from copy import deepcopy 
+from datetime import datetime 
+from future_builtins import map 
+import io 
+from lxml import etree 
 import os
 from PyQt5.Qt import (
     Qt,
