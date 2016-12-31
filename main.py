@@ -1,16 +1,20 @@
 #!/usr/bin/env python2
 # vim:fileencoding=utf-8:ai:ts=4:sw=4:et:sts=4:tw=128:
-from __future__ import (unicode_literals, division, absolute_import, print_function)
+from __future__ import (
+    unicode_literals,
+    division,
+    absolute_import,
+    print_function)
 
 __license__ = 'GPL v3'
 __copyright__ = '2016, Marco77 <http://www.mobileread.com/forums/member.php?u=271721>'
 __docformat__ = 'restructuredtext en'
 
-from copy import deepcopy 
-from datetime import datetime 
-from future_builtins import map 
-import io 
-from lxml import etree 
+from copy import deepcopy
+from datetime import datetime
+from future_builtins import map
+import io
+from lxml import etree
 import os
 from PyQt5.Qt import (
     Qt,
@@ -107,13 +111,17 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         Called back to create Actions for Plugin Menu and Toolbar
         """
-        ac = QAction(get_icons('images/{0}-icon.png'.format(self.name)), _('Filidel: Add QR trackers'), self.gui)
+        ac = QAction(get_icons(
+            'images/{0}-icon.png'.format(self.name)), _('Filidel: Add QR trackers'), self.gui)
         if not for_toolbar:
-            self.register_shortcut(ac, self.name, default_keys=('Ctrl+Shift+Alt+Q',))
+            self.register_shortcut(
+                ac, self.name, default_keys=(
+                    'Ctrl+Shift+Alt+Q',))
         else:
             menu = QMenu()
             ac.setMenu(menu)
-            checked_menu_item = menu.addAction('placeholder', self.toggle_act_on_current)
+            checked_menu_item = menu.addAction(
+                'placeholder', self.toggle_act_on_current)
             checked_menu_item.setCheckable(True)
             checked_menu_item.setChecked(self.act_on_current)
             self.toolbar_checkbox_ref = checked_menu_item
@@ -149,7 +157,9 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
                 return self.current_container.mi.title
             if not self.current_container.mi.is_null('series'):
                 if not self.current_container.mi.is_null('series_index'):
-                    return "{0} #{1}".format(self.current_container.mi.series, self.current_container.mi.series_index)
+                    return "{0} #{1}".format(
+                        self.current_container.mi.series,
+                        self.current_container.mi.series_index)
                 return self.current_container.mi.series
         return None
 
@@ -160,13 +170,13 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         Called by menu or toolbar action (UI 'slot')
         """
-        if not self.boss.ensure_book(_('You must first open a book to tweak, before trying to Add QR Trackers.')):
+        if not self.boss.ensure_book(
+                _('You must first open a book to tweak, before trying to Add QR Trackers.')):
             return
         if self.book_title is None:
-            show_report(False,
-                        _('Operation was cancelled'),
-                        [_('Please set a title and/or a series name in the book metadata')],
-                        self.gui, False)
+            show_report(
+                False, _('Operation was cancelled'), [
+                    _('Please set a title and/or a series name in the book metadata')], self.gui, False)
             return
 
         self.boss.commit_all_editors_to_container()
@@ -174,40 +184,44 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         # check media type for single file mode
         if self.act_on_current:
             current_name = editor_name(self.gui.central.current_editor)
-            if not current_name or self.current_container.mime_map[current_name] not in OEB_DOCS:
-                show_report(False,
-                            _('Operation was cancelled'),
-                            [_('No file open for editing or the current file is not an (x)html file.')],
-                            self.gui, False)
+            if not current_name or self.current_container.mime_map[
+                    current_name] not in OEB_DOCS:
+                show_report(
+                    False, _('Operation was cancelled'), [
+                        _('No file open for editing or the current file is not an (x)html file.')], self.gui, False)
                 return
         else:
             try:
                 next(self.current_container.manifest_items_of_type(OEB_DOCS))
             except StopIteration:
-                show_report(False,
-                            _('Operation was cancelled'),
-                            [_('This book does not seem to reference html files in its spine.')],
-                            self.gui, False)
+                show_report(
+                    False, _('Operation was cancelled'), [
+                        _('This book does not seem to reference html files in its spine.')], self.gui, False)
                 return
 
-        self.boss.add_savepoint(_('Before: Filidel: Add QR trackers ({0})').format(datetime.now().strftime('%c')))
+        self.boss.add_savepoint(
+            _('Before: Filidel: Add QR trackers ({0})').format(
+                datetime.now().strftime('%c')))
         with BusyCursor():
             try:
                 num_qr, num_max, grouped_exc = self.process_files()
             except Exception:
                 import traceback
-                error_dialog(self.gui,
-                             _('Failed to add QR trackers'),
-                             _('The complete error details may be viewed by clicking the "Show details" button'),
-                             det_msg=traceback.format_exc(),
-                             show=True)
+                error_dialog(
+                    self.gui,
+                    _('Failed to add QR trackers'),
+                    _('The complete error details may be viewed by clicking the "Show details" button'),
+                    det_msg=traceback.format_exc(),
+                    show=True)
                 self.boss.rewind_savepoint()
             else:
                 if grouped_exc is not None:
-                    show_report(False,
-                                _('The following items could not be processed'),
-                                grouped_exc.messages,
-                                self.gui, False)
+                    show_report(
+                        False,
+                        _('The following items could not be processed'),
+                        grouped_exc.messages,
+                        self.gui,
+                        False)
                 msg = _('{0} QR images were added out of {1}. Click "See What Changed" below to view differences.').format(
                     num_qr, num_max)
                 d = info_dialog(self.gui,
@@ -216,7 +230,10 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
                                 show=False)
                 d.b = d.bb.addButton(_('See what &changed'), d.bb.AcceptRole)
                 # d.b.setIcon(QIcon(I('diff.png'))), b.setAutoDefault(False)
-                d.b.clicked.connect(lambda: self.boss.show_current_diff(allow_revert=False), type=Qt.QueuedConnection)
+                d.b.clicked.connect(
+                    lambda: self.boss.show_current_diff(
+                        allow_revert=False),
+                    type=Qt.QueuedConnection)
                 d.exec_()
                 self.boss.apply_container_update_to_gui()
                 # todo: scroll to inserted element in single-mode
@@ -239,14 +256,14 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         else:
             cover_page_name = get_cover_page_name(self.current_container)
             if cover_page_name is not None:
-                names = [name
-                         for name in self.current_container.manifest_items_of_type(OEB_DOCS)
-                         if cover_page_name != name]
+                names = [name for name in self.current_container.manifest_items_of_type(
+                    OEB_DOCS) if cover_page_name != name]
             else:
-                names = [name
-                         for name in self.current_container.manifest_items_of_type(OEB_DOCS)]
+                names = [
+                    name for name in self.current_container.manifest_items_of_type(OEB_DOCS)]
                 # is first item a simple cover wrapper?
-                if find_cover_image_in_page(self.current_container, names[0]) is not None:
+                if find_cover_image_in_page(
+                        self.current_container, names[0]) is not None:
                     names = names[1:]
 
         # todo: use a progress dialog class worker
@@ -254,25 +271,35 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         names_to_process = [name
                             for name in self.get_probable_chapters(names, 0.3)]
         if len(names_to_process) == 0:
-            raise GroupedAbortError([_('Filidel has found no suitable candidate HTML page to process in the book spine.')])
+            raise GroupedAbortError(
+                [_('Filidel has found no suitable candidate HTML page to process in the book spine.')])
 
         logarray = []
         num_qr = 0
         for name in names_to_process:
             try:
                 title = self.get_chapter_title(self.current_container, name)
-                # prepare_html_node() invokes remove_previous_qr(), so make sure to only insert target image afterwards
-                insert_parent = self.prepare_html_node(self.current_container, name)
+                # prepare_html_node() invokes remove_previous_qr(), so make
+                # sure to only insert target image afterwards
+                insert_parent = self.prepare_html_node(
+                    self.current_container, name)
                 self.current_container.dirty(name)
 
-                qr_image_name = self.generate_qrcode(self.current_container, name, title)  # add_to_spine=True
-                self.embed_qr_link(self.current_container, name, insert_parent, qr_image_name)
+                qr_image_name = self.generate_qrcode(
+                    self.current_container, name, title)  # add_to_spine=True
+                self.embed_qr_link(
+                    self.current_container,
+                    name,
+                    insert_parent,
+                    qr_image_name)
                 self.current_container.dirty(name)
             except AbortError as e:  # those are raised errors where stack trace is not deemed very important
-                logarray.append('<b>{name}</b>: {msg}'.format(name=name, msg=e.message))
+                logarray.append(
+                    '<b>{name}</b>: {msg}'.format(name=name, msg=e.message))
             else:
                 num_qr += 1
-        grouped_exc = GroupedAbortError(logarray) if len(logarray) > 0 else None
+        grouped_exc = GroupedAbortError(
+            logarray) if len(logarray) > 0 else None
         return num_qr, len(names_to_process), grouped_exc
 
     def get_probable_chapters(self, names, min_score):
@@ -283,8 +310,10 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         (in [0.0-1.0] range)
         """
         for name in names:
-            if self.real_chapter_probability(self.current_container, name) >= min_score:
-                # We do not want to attach QR codes to cover page, galleries and so forth
+            if self.real_chapter_probability(
+                    self.current_container, name) >= min_score:
+                # We do not want to attach QR codes to cover page, galleries
+                # and so forth
                 yield name
 
 
@@ -307,12 +336,14 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
             for element in root.xpath('//*[@epub:type]', namespaces=nsmap):
                 # print("*-{0}\n".format(element.attrib))
                 # retard notation brought to you by lxml
-                epubtype = element.attrib['{' + '{0}'.format(nsmap['epub']) + '}type']
+                epubtype = element.attrib[
+                    '{' + '{0}'.format(nsmap['epub']) + '}type']
                 # print(" - type = {0}\n".format(epubtype))
                 if epubtype is not None and epubtype.lower() == 'introduction':
                     score += -0.7
         # Score down pages which look like an illustration gallery
-        images_tag_count = root.xpath('count(//*[local-name()="svg" or local-name()="img"])')
+        images_tag_count = root.xpath(
+            'count(//*[local-name()="svg" or local-name()="img"])')
         # print("svg/img = {0}\n".format(images_tag_count))
         if images_tag_count < 1:
             score += 0.3
@@ -336,7 +367,8 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         if 'epub' in root.nsmap:
             for heading in self.title_headings_list:
-                expr = '//*[@epub:type="title" and local-name()="' + heading + '"]'
+                expr = '//*[@epub:type="title" and local-name()="' + \
+                    heading + '"]'
                 title = self._get_enclosed_text_from_xpath(root, expr, nsmap)
                 if title is not None:
                     return title
@@ -367,7 +399,10 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         """
         headingnodes = element.xpath(expr, namespaces=namespaces)
         if len(headingnodes) > 0:
-            title = etree.tostring(headingnodes[0], method='text', encoding="UTF-8").strip()
+            title = etree.tostring(
+                headingnodes[0],
+                method='text',
+                encoding="UTF-8").strip()
             # print("heading type = {0}\n".format(title))
             return title
         return None
@@ -386,12 +421,14 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         root = container.parsed(name)
 
-        expr = '//*[' + ' or '.join(map(lambda x: '@id="{0}"'.format(x), prefs['node_element_id'])) + ']'
+        expr = '//*[' + ' or '.join(
+            map(lambda x: '@id="{0}"'.format(x), prefs['node_element_id'])) + ']'
         nodes = root.xpath(expr)
         insert_element = nodes[0] if len(nodes) > 0 else None
         # raise AbortError(etree.tostring(nodes[0], method='html', encoding="UTF-8").strip())
         self.remove_previous_qr(container, name, insert_element)
-        insert_element = self.create_element_placeholder(container, name, insert_element)
+        insert_element = self.create_element_placeholder(
+            container, name, insert_element)
         return insert_element
 
 
@@ -407,7 +444,8 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         root = container.parsed(name)
 
-        for elt in insert_element.iter('{' + '{0}'.format(root.nsmap[None]) + '}img'):
+        for elt in insert_element.iter(
+                '{' + '{0}'.format(root.nsmap[None]) + '}img'):
             # resolve relative or absolute hyperlink
             qrname = container.href_to_name(elt.attrib['src'], name)
             # print(etree.tostring(elt, method='html', encoding="UTF-8").strip())
@@ -420,7 +458,12 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
             break
 
 
-    def create_element_placeholder(self, container, name, insert_element, prefs=None):
+    def create_element_placeholder(
+            self,
+            container,
+            name,
+            insert_element,
+            prefs=None):
         """
         Create an element to place our code
 
@@ -440,20 +483,34 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         body_nodes = root.xpath('//*[local-name()="body"][1]')
         if len(body_nodes) == 0:
-            raise AbortError("{0} does not have a &lt;body> tag, please check book prior to running this plugin.".format(name))
-        node = etree.SubElement(body_nodes[0], XHTML(prefs['node_element_tagname']),
-                                id=prefs['node_element_id'][0])
+            raise AbortError(
+                "{0} does not have a &lt;body> tag, please check book prior to running this plugin.".format(name))
+        node = etree.SubElement(
+            body_nodes[0],
+            XHTML(
+                prefs['node_element_tagname']),
+            id=prefs['node_element_id'][0])
         node.attrib['class'] = prefs['node_element_id'][0]
         node.tail = '\n'
         if prefs['node_element_type'] is not None and 'epub' in root.nsmap:
-            node.attrib['{' + '{0}'.format(root.nsmap['epub']) + '}type'] = prefs['node_element_type']
+            node.attrib[
+                '{' +
+                '{0}'.format(
+                    root.nsmap['epub']) +
+                '}type'] = prefs['node_element_type']
         # works: etree.SubElement(body_nodes[0], XHTML('div'), id='testing0')
         # works: etree.SubElement(root, XHTML('span'), id='testing')
         container.dirty(name)
         return node
 
 
-    def generate_qrcode(self, container, name, item_title, add_to_spine=True, prefs=None):
+    def generate_qrcode(
+            self,
+            container,
+            name,
+            item_title,
+            add_to_spine=True,
+            prefs=None):
         """
         Generate a QR image and optionally add it to spine
 
@@ -462,7 +519,8 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         prefs = prefs or self.cprefs
 
         qr = QRCode()
-        qr.add_data(_('Completed {0} - {1}').format(self.book_title, item_title))
+        qr.add_data(
+            _('Completed {0} - {1}').format(self.book_title, item_title))
         im = qr.make_image()
         data = None
         with io.BytesIO() as output:
@@ -470,7 +528,8 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
             output.seek(0)
             data = output.read()
         # debug: set edit_file param to True to automatically open in editor
-        return container.add_file(self.target_qr_filename_from_name(name), data)
+        return container.add_file(
+            self.target_qr_filename_from_name(name), data)
 
     def target_qr_filename_from_name(self, item_name, prefs=None):
         """Return spine name for target QR png"""
@@ -478,10 +537,17 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
 
         path = os.path.basename(item_name)
         path_noext = os.path.splitext(path)[0]
-        return prefs['imagepath_fmt'].format(pagename=path, pagename_noext=path_noext)
+        return prefs['imagepath_fmt'].format(
+            pagename=path, pagename_noext=path_noext)
 
 
-    def embed_qr_link(self, container, name, insert_element, image_name, prefs=None):
+    def embed_qr_link(
+            self,
+            container,
+            name,
+            insert_element,
+            image_name,
+            prefs=None):
         """
         Add image link in given element
 
@@ -490,7 +556,8 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         root = container.parsed(name)
 
         eltimg = None
-        for elt in insert_element.iter('{' + '{0}'.format(root.nsmap[None]) + '}img'):
+        for elt in insert_element.iter(
+                '{' + '{0}'.format(root.nsmap[None]) + '}img'):
             eltimg = elt
             break
         if eltimg is None:
@@ -500,5 +567,9 @@ class EditBook_QrCodeTrackerFilidelPlugin(Tool):
         eltimg.attrib['src'] = container.name_to_href(image_name, name)
 
         container.dirty(name)
-        print(etree.tostring(insert_element, method='html', encoding="UTF-8").strip())
+        print(
+            etree.tostring(
+                insert_element,
+                method='html',
+                encoding="UTF-8").strip())
         return eltimg
