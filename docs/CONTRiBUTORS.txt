@@ -1,0 +1,2 @@
+﻿QRCode Tracker Filidel is (c) 2016
+ * mchubby
