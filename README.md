@@ -8,7 +8,8 @@ Its use case is for e-readers that are for a reason or another disconnected from
 
 # Installing
 
- * Download a zipped copy of this repository, either using a [tagged release](https://github.com/mchubby/qrtracker-for-calibre/releases/latest). Notice: at this point, Calibre requires files packed inside zip to sit at **top-level of archive** and not in a subdirectory. Download the zip marked as **RELEASE**.
+ * **Calibre 2.61 or later** is required
+ * Download a zipped copy of this repository, using a [tagged release](https://github.com/mchubby/qrtracker-for-calibre/releases/latest). Notice: at this point, Calibre requires files packed inside zip to sit at **top-level of archive** and not in a subdirectory. Download the zip marked as **RELEASE**.
  * Install this ZIP using the Calibre "preferences > plugins" dialog. [Click here for a tutorial with images](http://www.ismoothblog.com/2012/07/how-to-install-plugin-to-calibre.html) in case you cannot find it.
 
 # Using
@@ -18,10 +19,7 @@ Its use case is for e-readers that are for a reason or another disconnected from
 
 # License and contributing
  * [Contributors list](docs/CONTRiBUTORS.txt)
- * You are free to copy and redistribute under the terms of the [GNU General Public License, version 3 or later](LICENSE)
+ * You are free to copy and redistribute under the terms of the [GNU General Public License, version 3 or later](LICENSE). Translated versions are available on the [GNU website](https://www.gnu.org/licenses/translations.html).
  * A modified copy of [qrcode 5.3](https://github.com/lincolnloop/python-qrcode/releases/tag/v5.3) is bundled. As per its [license](licenses/QRCODE_LICENSE), the combined work is licensed under the GPLv3. To obtain the original, unmodified MIT-licensed library, visit [the original repository](https://github.com/lincolnloop/python-qrcode)
- * Feel free to open an issue if you think this software behaves incorrectly or needs improvement
- * If you are a developer, follow the usual guidelines to fork, branch and submit a pull request on Github
- * For minor corrections, Github-integrated editor pull requests are accepted
-
+ * For more information on contributing, refer to the [CONTRIBUTING.md](.github/CONTRIBUTING.md) document
 
