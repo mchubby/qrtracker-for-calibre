@@ -17,6 +17,23 @@ Its use case is for e-readers that are for a reason or another disconnected from
  * Click **Menu Plugins -> “Filidel: Add QR trackers”**
  * Review changes to your book, then save.
 
+# Customizing the appearance
+
+Generated images are version 2 QR tags, which have a variable width. I'm not sure if I have control over that.
+
+On the other hand, the following piece of HTML is appended at the end of each chapter:
+```html
+<aside id="qrtracker" class="qrtracker"><img src="../filidelqr-c01.png"/>
+</aside>
+```
+
+Assuming each chapter link to a CSS stylesheet, you could use the following excerpt to center the paragraph:
+```CSS
+.qrtracker {
+    text-align: center
+}
+```
+
 # License and contributing
  * [Contributors list](docs/CONTRiBUTORS.txt)
  * You are free to copy and redistribute under the terms of the [GNU General Public License, version 3 or later](LICENSE). Translated versions are available on the [GNU website](https://www.gnu.org/licenses/translations.html).
