@@ -1,14 +1,16 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim:fileencoding=utf-8:ai:ts=4:sw=4:et:sts=4:tw=128:
 from __future__ import (unicode_literals, division, absolute_import, print_function)
 
 __license__ = 'GPL v3'
-__copyright__ = '2016, Marco77 <http://www.mobileread.com/forums/member.php?u=271721>'
+__copyright__ = '2016-2019, Marco77 <http://www.mobileread.com/forums/member.php?u=271721>'
 __docformat__ = 'restructuredtext en'
 
 from copy import deepcopy
 from datetime import datetime
-from future_builtins import map
+import sys
+if sys.version_info[0] == 2:
+    from future_builtins import map
 import io
 from lxml import etree
 import os
